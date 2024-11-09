@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Scientific Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .output {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .clear {
+            background-color: #e57373;
+            color: white;
+        }
+
+        .number {
+            background-color: #81c784;
+            color: white;
+        }
+
+        .operator {
+            background-color: #64b5f6;
+            color: white;
+        }
+
+        .special {
+            background-color: #ffb74d;
+            color: white;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="output">
+        <input type="text" id="result" disabled />
+    </div>
+
+    <div class="buttons">
+        <button class="clear" onclick="clearFields()">C</button>
+        <button class="number" onclick="appendValue('7')">7</button>
+        <button class="number" onclick="appendValue('8')">8</button>
+        <button class="number" onclick="appendValue('9')">9</button>
+
+        <button class="number" onclick="appendValue('4')">4</button>
+        <button class="number" onclick="appendValue('5')">5</button>
+        <button class="number" onclick="appendValue('6')">6</button>
+        <button class="operator" onclick="appendValue('+')">+</button>
+
+        <button class="number" onclick="appendValue('1')">1</button>
+        <button class="number" onclick="appendValue('2')">2</button>
+        <button class="number" onclick="appendValue('3')">3</button>
+        <button class="operator" onclick="appendValue('-')">-</button>
+
+        <button class="number" onclick="appendValue('0')">0</button>
+        <button class="operator" onclick="appendValue('.')">.</button>
+        <button class="operator" onclick="calculateResult()">=</button>
+        <button class="operator" onclick="appendValue('*')">*</button>
+
+        <button class="special" onclick="calculateSquareRoot()">√</button>
+        <button class="special" onclick="calculateExponent()">^</button>
+        <button class="special" onclick="calculateLog()">log</button>
+        <button class="special" onclick="calculateTrig('sin')">sin</button>
+
+        <button class="special" onclick="calculateTrig('cos')">cos</button>
+        <button class="special" onclick="calculateTrig('tan')">tan</button>
+        <button class="special" onclick="calculatePi()">π</button>
+        <button class="special" onclick="calculateInverse()">1/x</button>
+    </div>
+</div>
+
+<script>
+    function appendValue(value) {
+        const resultField = document.getElementById('result');
+        if (resultField.value === 'Error') {
+            resultField.value = '';
+        }
+        resultField.value += value;
+    }
+
+    function clearFields() {
+        document.getElementById('result').value = '';
+    }
+
+    function calculateResult() {
+        try {
+            const expression = document.getElementById('result').value;
+            let result = eval(expression);
+            document.getElementById('result').value = result;
+        } catch (error) {
+            document.getElementById('result').value = 'Error';
+        }
+    }
+
+    function calculateSquareRoot() {
+        const value = parseFloat(document.getElementById('result').value);
+        document.getElementById('result').value = isNaN(value) ? 'Error' : Math.sqrt(value);
+    }
+
+    function calculateExponent() {
+        const [base, exponent] = document.getElementById('result').value.split('^').map(Number);
+        document.getElementById('result').value = !isNaN(base) && !isNaN(exponent) ? Math.pow(base, exponent) : 'Error';
+    }
+
+    function calculateLog() {
+        const value = parseFloat(document.getElementById('result').value);
+        document.getElementById('result').value = value > 0 ? Math.log10(value) : 'Error';
+    }
+
+    function calculateTrig(func) {
+        const value = parseFloat(document.getElementById('result').value);
+        const radians = value * Math.PI / 180;
+        const result = func === 'sin' ? Math.sin(radians) : func === 'cos' ? Math.cos(radians) : Math.tan(radians);
+        document.getElementById('result').value = isNaN(result) ? 'Error' : result;
+    }
+
+    function calculatePi() {
+        document.getElementById('result').value = Math.PI;
+    }
+
+    function calculateInverse() {
+        const value = parseFloat(document.getElementById('result').value);
+        document.getElementById('result').value = value !== 0 ? 1 / value : 'Error';
+    }
+</script>
+
+</body>
+</html>
